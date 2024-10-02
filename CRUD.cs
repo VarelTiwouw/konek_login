@@ -22,7 +22,7 @@ namespace konek_login
         private string alamat, query;
         public CRUD()
         {
-            alamat = "server=localhost; database=db_kasir; username=root; password=;";
+            alamat = "server=localhost; database=db_biscash; username=root; password=;";
             koneksi = new MySqlConnection(alamat);
 
             InitializeComponent();
@@ -49,7 +49,7 @@ namespace konek_login
             {
                 if (txtUsername.Text != "")
                 {
-                    query = string.Format("select * from tb_pengguna where username = '{0}'", txtUsername.Text);
+                    query = string.Format("select * from tb_user where username = '{0}'", txtUsername.Text);
                     ds.Clear();
                     koneksi.Open();
                     perintah = new MySqlCommand(query, koneksi);
@@ -61,10 +61,10 @@ namespace konek_login
                     {
                         foreach (DataRow kolom in ds.Tables[0].Rows)
                         {
-                            txtID.Text = kolom["id_pengguna"].ToString();
+                            txtID.Text = kolom["id_user"].ToString();
                             txtPassword.Text = kolom["password"].ToString();
                             txtNama.Text = kolom["nama_pengguna"].ToString();
-                            CBLevel.Text = kolom["level"].ToString();
+                            CBLevel.Text = kolom["role"].ToString();
 
                         }
                         txtUsername.Enabled = false;
@@ -101,7 +101,7 @@ namespace konek_login
                 {
                     if (MessageBox.Show("Anda Yakin Menghapus Data Ini ??", "Warning", MessageBoxButtons.YesNo) == DialogResult.Yes)
                     {
-                        query = string.Format("Delete from tb_pengguna where id_pengguna = '{0}'", txtID.Text);
+                        query = string.Format("Delete from tb_user where id_user = '{0}'", txtID.Text);
                         ds.Clear();
                         koneksi.Open();
                         perintah = new MySqlCommand(query, koneksi);
@@ -137,7 +137,7 @@ namespace konek_login
                 if (txtUsername.Text != "" && txtNama.Text != "" && txtPassword.Text != "" && txtID.Text != "")
                 {
 
-                    query = string.Format("insert into tb_pengguna values  ('{0}', '{1}', '{2}','{3}', '{4}');", txtID.Text, txtUsername.Text, txtPassword.Text, txtNama.Text, CBLevel.Text);
+                    query = string.Format("insert into tb_user values  ('{0}', '{1}', '{2}','{3}', '{4}');", txtID.Text, txtUsername.Text, txtPassword.Text, txtNama.Text, CBLevel.Text);
 
 
                     koneksi.Open();
@@ -178,7 +178,7 @@ namespace konek_login
                 if (txtPassword.Text != "" && txtNama.Text != "" && txtUsername.Text != "" && txtID.Text != "")
                 {
 
-                    query = string.Format("update tb_pengguna set id_pengguna = '{0}', nama_pengguna = '{1}', password = '{2}' where level = '{3}'", txtID.Text, txtNama.Text, txtPassword.Text, CBLevel.Text);
+                    query = string.Format("update tb_user set id_user = '{0}', username = '{1}', password = '{2}' where role = '{3}'", txtID.Text, txtNama.Text, txtPassword.Text, CBLevel.Text);
 
 
                     koneksi.Open();
@@ -226,12 +226,18 @@ namespace konek_login
             this.Hide();
         }
 
+        private void print_Click(object sender, EventArgs e)
+        {
+            frmuser frmuser = new frmuser();
+            frmuser.Show();
+        }
+
         private void CRUD_Load(object sender, EventArgs e)
         {
             try
             {
                 koneksi.Open();
-                query = string.Format("select * from tb_pengguna");
+                query = string.Format("select * from tb_user");
                 perintah = new MySqlCommand(query, koneksi);
                 adapter = new MySqlDataAdapter(perintah);
                 perintah.ExecuteNonQuery();
