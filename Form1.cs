@@ -22,16 +22,21 @@ namespace konek_login
         private string alamat, query;
         public Form1()
         {
-            alamat = "server=localhost; database=db_kasir; username=root; password=;";
+            alamat = "server=localhost; database=db_biscash; username=root; password=;";
             koneksi = new MySqlConnection(alamat);
             InitializeComponent();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
 
         private void btnlogin_Click(object sender, EventArgs e)
         {
             try
             {
-                query = string.Format("select * from tb_pengguna where username = '{0}'", txtusername.Text);
+                query = string.Format("select * from tb_user where username = '{0}'", txtusername.Text);
                 ds.Clear();
                 koneksi.Open();
                 perintah = new MySqlCommand(query, koneksi);
